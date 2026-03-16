@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - RevVault</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js"></script>
+</head>
+
+<body class="d-flex align-items-center justify-content-center animate-fade-in py-5"
+    style="min-height: 100vh; position: relative;">
+
+    <!-- Language Selector Dropdown -->
+    <div class="position-absolute top-0 end-0 p-3">
+        <select id="langSelect" class="form-select bg-dark text-white border-secondary shadow-sm"
+            onchange="changeLanguage(this.value)" style="width: auto; appearance: auto;">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="ja">日本語 (Japanese)</option>
+            <option value="fr">Français (French)</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="text-center mb-4">
+                    <h1
+                        style="background: linear-gradient(135deg, #3b82f6, #60a5fa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; display: flex; justify-content: center; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#3b82f6"
+                            class="bi bi-shield-lock-fill me-2" viewBox="0 0 16 16"
+                            style="-webkit-text-fill-color: initial;">
+                            <path fill-rule="evenodd"
+                                d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5" />
+                        </svg>
+                        <span data-i18n="app_title">RevVault</span>
+                    </h1>
+                    <p class="text-secondary" data-i18n="register_subtitle">Create your secure vault</p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="text-center mb-4" data-i18n="register_header">Register</h3>
+
+                    <form id="registerForm">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" data-i18n="username_label">Username</label>
+                                <input type="text" id="username" class="form-control-custom"
+                                    placeholder="Choose username" data-i18n="username_placeholder" autocomplete="off"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" data-i18n="email_label">Email</label>
+                                <input type="email" id="email" class="form-control-custom"
+                                    placeholder="Enter email address" data-i18n="email_placeholder" autocomplete="off"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" data-i18n="master_password_label">Master Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="password" class="form-control-custom"
+                                    placeholder="Create a strong master password"
+                                    data-i18n="create_password_placeholder" autocomplete="new-password" required>
+                                <span class="password-toggle" onclick="toggleVisibility('password')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <small class="text-secondary d-block mt-1" data-i18n="password_warning">This is the only way
+                                to access your vault. Don't forget it!</small>
+                        </div>
+
+                        <hr class="border-secondary my-4">
+
+                        <h5 class="mb-3 text-info" data-i18n="security_questions_header">Security Questions (Minimum 3)
+                        </h5>
+                        <p class="text-secondary" style="font-size: 0.9rem;" data-i18n="security_questions_sub">Used for
+                            account recovery</p>
+
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="q1_label">Question 1</label>
+                            <select id="q1" class="form-control-custom mb-2">
+                                <option value="" data-i18n="select_question">Select Question</option>
+                                <option value="1" data-i18n="sq_1">What is your Favourite Game?</option>
+                                <option value="2" data-i18n="sq_2">What was your first school?</option>
+                                <option value="3" data-i18n="sq_3">What is your favorite player?</option>
+                                <option value="4" data-i18n="sq_4">What is your birth city?</option>
+                                <option value="5" data-i18n="sq_5">What was your childhood nickname?</option>
+                            </select>
+                            <input type="text" id="a1" class="form-control-custom" placeholder="Answer"
+                                data-i18n="answer_placeholder">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="q2_label">Question 2</label>
+                            <select id="q2" class="form-control-custom mb-2">
+                                <option value="" data-i18n="select_question">Select Question</option>
+                                <option value="1" data-i18n="sq_1">What is your Favourite Game?</option>
+                                <option value="2" data-i18n="sq_2">What was your first school?</option>
+                                <option value="3" data-i18n="sq_3">What is your favorite player?</option>
+                                <option value="4" data-i18n="sq_4">What is your birth city?</option>
+                                <option value="5" data-i18n="sq_5">What was your childhood nickname?</option>
+                            </select>
+                            <input type="text" id="a2" class="form-control-custom" placeholder="Answer"
+                                data-i18n="answer_placeholder">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" data-i18n="q3_label">Question 3</label>
+                            <select id="q3" class="form-control-custom mb-2">
+                                <option value="" data-i18n="select_question">Select Question</option>
+                                <option value="1" data-i18n="sq_1">What is your Favourite Game?</option>
+                                <option value="2" data-i18n="sq_2">What was your first school?</option>
+                                <option value="3" data-i18n="sq_3">What is your favorite player?</option>
+                                <option value="4" data-i18n="sq_4">What is your birth city?</option>
+                                <option value="5" data-i18n="sq_5">What was your childhood nickname?</option>
+                            </select>
+                            <input type="text" id="a3" class="form-control-custom" placeholder="Answer"
+                                data-i18n="answer_placeholder">
+                        </div>
+
+                        <button type="submit" class="btn-custom btn-primary-custom w-100 btn-lg mt-2"
+                            data-i18n="create_account_btn">
+                            Create Account
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <p class="text-secondary"><span data-i18n="already_have">Already have an account?</span> <a
+                                    href="login.html" class="text-info text-decoration-none"
+                                    data-i18n="login_here">Login here</a></p>
+                        </div>
+
+                        <p id="message" class="text-center mt-3 text-danger fw-bold"></p>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+
+    <script>
+        function updateSecurityQuestions() {
+            let selected = [$("#q1").val(), $("#q2").val(), $("#q3").val()];
+            $("#q1 option, #q2 option, #q3 option").show();
+            selected.forEach(function (value) {
+                if (value !== "") {
+                    $("#q1 option[value='" + value + "']").not(":selected").hide();
+                    $("#q2 option[value='" + value + "']").not(":selected").hide();
+                    $("#q3 option[value='" + value + "']").not(":selected").hide();
+                }
+            });
+        }
+
+        $("#q1, #q2, #q3").change(function () {
+            updateSecurityQuestions();
+        });
+
+        $("#registerForm").submit(function (e) {
+            e.preventDefault();
+
+            if ($("#q1").val() == "" || $("#q2").val() == "" || $("#q3").val() == "" ||
+                $("#a1").val() == "" || $("#a2").val() == "" || $("#a3").val() == "") {
+                alert("Please select and answer all 3 security questions");
+                return;
+            }
+
+            let q1 = $("#q1").val();
+            let q2 = $("#q2").val();
+            let q3 = $("#q3").val();
+
+            if (q1 === q2 || q1 === q3 || q2 === q3) {
+                alert("Please select 3 different security questions");
+                return;
+            }
+
+            const data = {
+                username: $("#username").val(),
+                email: $("#email").val(),
+                masterPassword: $("#password").val(),
+                securityAnswers: [
+                    { questionId: $("#q1").val(), answer: $("#a1").val() },
+                    { questionId: $("#q2").val(), answer: $("#a2").val() },
+                    { questionId: $("#q3").val(), answer: $("#a3").val() }
+                ]
+            };
+
+            axios.post(API_BASE + "/register", data)
+                .then(function () {
+                    alert("Registration successful");
+                    window.location.href = "login.html";
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    if (err.response && err.response.data && err.response.data.message) {
+                        alert("Registration failed: " + err.response.data.message);
+                    } else {
+                        alert("Registration failed");
+                    }
+                });
+        });
+
+        function toggleVisibility(id) {
+            var input = document.getElementById(id);
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

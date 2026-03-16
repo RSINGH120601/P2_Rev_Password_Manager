@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevVault - Password Manager</title>
+    <!-- Bootstrap grid system -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/theme.js"></script>
+</head>
+<body class="animate-fade-in">
+
+<div class="container py-5">
+    
+    <!-- Header -->
+    <div class="glass-card mb-4 d-flex justify-content-between align-items-center">
+        <h2 class="m-0" style="background: linear-gradient(135deg, #3b82f6, #60a5fa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#3b82f6" class="bi bi-shield-lock-fill me-2" viewBox="0 0 16 16" style="-webkit-text-fill-color: initial;">
+                <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5"/>
+            </svg>
+            RevVault
+        </h2>
+        <div class="d-flex gap-2">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+            <button class="btn-custom btn-outline-custom" onclick="window.location.href='profile.html'">Profile</button>
+            <button class="btn-custom btn-danger-custom" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Weak Password Alert -->
+    <div id="weakPasswordAlert" class="glass-card mb-4" style="display: none; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 16px;">
+        <div class="d-flex align-items-center w-100">
+            <span style="font-size: 1.5rem; margin-right: 12px;">⚠️</span>
+            <div style="flex-grow: 1;">
+                <strong style="color: #b45309;" class="d-block">Security Warning</strong>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">You have <span id="weakCountDisplay" class="fw-bold text-danger">0</span> weak passwords in your vault. Please review and update them to secure your accounts.</span>
+            </div>
+            <button class="btn-custom border-0 text-white" style="background: #d97706; padding: 8px 16px;" onclick="window.location.href='security-audit.html'">Review Audit</button>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="glass-card mb-4">
+        <h5 class="mb-3 text-secondary">Quick Actions</h5>
+        <div class="d-flex flex-wrap gap-3">
+            <button class="btn-custom btn-primary-custom" onclick="goAddPassword()">+ Add Password</button>
+            <button class="btn-custom btn-outline-custom" onclick="goGenerator()">Create Strong Password</button>
+            <button class="btn-custom btn-outline-custom text-warning" style="border-color: rgba(245, 158, 11, 0.3);" onclick="goAudit()">View Security Audit</button>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn-custom btn-outline-custom" onclick="exportVault()">Export Vault</button>
+                <input type="file" id="importFile" hidden onchange="importVault(event)">
+                <button class="btn-custom btn-outline-custom" onclick="document.getElementById('importFile').click()">Import Vault</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-center">
+                <span class="text-secondary fw-semibold mb-2">Total Passwords</span>
+                <h2 id="totalPasswords" class="m-0 display-4 fw-bold text-primary">0</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-center">
+                <span class="text-secondary fw-semibold mb-2">Favorites</span>
+                <h2 id="favoritePasswords" class="m-0 display-4 fw-bold text-warning">0</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-center">
+                <span class="text-secondary fw-semibold mb-2">Weak Passwords</span>
+                <h2 id="weakPasswords" class="m-0 display-4 fw-bold text-danger">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vault Grid/Table -->
+    <div class="glass-card">
+        <div class="row mb-4 g-3 align-items-center">
+            <div class="col-md-6">
+                <h4 class="m-0">Your Vault</h4>
+            </div>
+            <div class="col-md-6 d-flex gap-3">
+                <input type="text" id="searchBox" class="form-control-custom" placeholder="Search passwords..." onkeyup="searchPasswords()">
+                <select id="categoryFilter" class="form-control-custom w-auto" onchange="filterCategory()">
+                    <option value="">All Categories</option>
+                    <option value="Social">Social</option>
+                    <option value="Banking">Banking</option>
+                    <option value="Email">Email</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Work">Work</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select id="sortFilter" class="form-control-custom w-auto" onchange="sortPasswords()">
+                    <option value="id">Date Added</option>
+                    <option value="accountName">Name (A-Z)</option>
+                    <option value="category">Category</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>Website</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Category</th>
+                        <th>Favorites</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="passwordTable">
+                    <!-- Loaded via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
